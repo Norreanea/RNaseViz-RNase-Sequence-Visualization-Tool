@@ -1,7 +1,7 @@
 # RNaseViz-RNase-Sequence-Visualization-Tool
 
 RNaseViz is a web-based application built with R Shiny, providing an interactive platform for visualizing RNase sequences, their conservation across different species, and the mutations associated with Mendelian diseases.
-
+https://norreanea.shinyapps.io/RNaseViz/
 ## Features
 
 - Selection of RNase enzymes from a predefined list.
