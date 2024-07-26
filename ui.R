@@ -3,7 +3,7 @@
 #install.packages("shinydashboard")
 #install.packages("shinyBS")
 #install.packages("shiny.semantic")
-
+#Load libraries
 library(shiny)
 library(shinydashboard)
 library(seqvisr)
@@ -13,6 +13,15 @@ library(shinyjs)
 library(shinyMobile)
 library(shiny.semantic)
 
+#name == "Saccharomyces_cerevisiae"  ~ 'SC',
+#       name == "Drosophila_melanogaster"  ~ 'DM',
+#       name == "Caenorhabditis_elegans"  ~ 'CE',
+#       name == "Danio_rerio"  ~ 'DR',
+#       name == "Xenopus_tropicalis"  ~ 'XT',
+#       name == "Homo_sapiens"  ~ 'HS',
+#       name == "Rattus_norvegicus"  ~ 'RT',
+#       name == "Mus_musculus"  ~ 'MM',
+#       TRUE ~ 'Other'),
 ui <- function() {
   semanticPage(
     title = "RNase Sequence Visualization (RNaseViz)",
@@ -20,31 +29,50 @@ ui <- function() {
     div(
       class = "ui stackable grid",  # stackable grid for responsiveness
       div(
-        class = "six wide column",  # This defines the width of the sidebar
+        class = "six wide column",  # defines the width of the sidebar
         div(
           selectInput("rnase", "Choose RNase:",
-                      choices = c("RNASEH1", "RNASEH2A", "RNASEH2B", "RNASEH2C", "AGO2", "DICER1", "ELAC2", "DIS3L2", "RNASET2", "PARN", "PRORP")),
-          actionButton("visualizeBtn", "Visualize", class = "large primary active button",style = "font-size: 18px;"),
-          numericInput("mutationPos", "Enter position in human reference sequence:", 1, min = 1),
-          actionButton("highlightMutation", "Highlight position", class = "large secondary button",style = "font-size: 18px;"),
-          textOutput("alignedPosInfo"),
+                      choices = c("RNASEH2A", "RNASEH2B", "RNASEH2C", "AGO2", "RNASET2", "DICER1", "DIS3L2", "ELAC2", "PRORP", "PARN", "RNASEH1")),
+          actionButton("visualizeBtn", "Visualize", class = "large primary active button", style = "font-size: 18px;"),
+          
+          # Separated elements with grey background
+          div(
+            class = "ui segment",
+            style = "background-color: #f0f0f0; padding: 15px; border-radius: 5px;",
+            h3(" "),
+            # selectInput("referenceOrganism", "Select organism:", 
+            #             choices = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+            #                         "Caenorhabditis elegans", "Drosophila melanogaster","Saccharomyces cerevisiae")),
+            selectInput("referenceOrganism", "Select organism:", 
+                        choices = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                    "Caenorhabditis elegans", "Drosophila melanogaster","Saccharomyces cerevisiae"), 
+                        selected = "Homo sapiens"),
+            h3(" "),
+            numericInput("mutationPos", "Enter position in reference sequence for selected organism:", 1, min = 1),
+            actionButton("highlightMutation", "Highlight position", class = "large secondary button", style = "font-size: 18px;"),
+            htmlOutput("alignedPosInfo")
+          ),
+          
           uiOutput("rnaseInfo"),
           uiOutput("rnaseImageContainer"),
+          uiOutput("BioRender"),
           style = "padding-bottom: 20px;"
         ),
         style = "overflow: auto; max-height: 100vh;"
       ),
       div(
-        class = "ten wide column",  # This defines the width of the main panel
-        uiOutput("mainPanelSegments")
+        class = "ten wide column",  # defines the width of the main panel
+        uiOutput("mainPanelSegments"),
+        style = "overflow: auto; max-height: 100vh;"
       )
     ),
-    style = "height: 100vh; padding: 1em; text-align: justify;",  # Ensures the page takes the full height
+    style = "height: 100vh; padding: 1em; text-align: justify;",  # ensures the page takes the full height
     tags$head(
       tags$style(HTML("
       /* Layout */
         .ui.stackable.grid {
           display: flex;
+          
           flex-direction: column;
           height: 100%;
         }
@@ -70,7 +98,7 @@ ui <- function() {
         }
         /* alignedPosInfo */
         #alignedPosInfo {
-          fint-size: 16px;
+          font-size: 16px;
         }
 
         /* main title */
@@ -95,10 +123,20 @@ ui <- function() {
           height: auto; /* Maintain aspect ratio */
           width: auto; /* Adjust width based on height */
         }
+
+        /* Custom grey background for segment */
+        .grey-background {
+          background-color: #f0f0f0;
+          padding: 15px;
+          border-radius: 5px;
+        }
+        
         
       "))
     )
   )
 }
+
+
 #max-width: 100%;
 #max-height: calc(600px - 20px);
