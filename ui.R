@@ -24,6 +24,7 @@ library(shiny.semantic)
 #       TRUE ~ 'Other'),
 ui <- function() {
   semanticPage(
+    useShinyjs(),  # Initialize shinyjs
     title = "RNase Sequence Visualization (RNaseViz)",
     h1("RNase Sequence Visualization (RNaseViz)"),
     div(
