@@ -29,26 +29,34 @@ multfeatures_RNASEH2A <- list(c("HS", 93,"G37S"),
                               c("HS", 73,"V23V (V[GTG]>V[GTA])"),
                               c("HS", 262,"R186W"),
                               c("HS", 288,"N212I"),
-                              c("SC",93,"G37S"),
+                              c("SC",93,"G42S"),
                               c("MM",93,"G37S"))
 inpmsa_RNASEH2B <- "./data/reordered_for_msavisr_RNASEH2BAln.fa"
 inpmsa_RNASEH2B_ggmsa <- "./data/reordered_for_ggmsa_RNASEH2BAln.fa"
 multfeatures_RNASEH2B <- list(c("HS", 203,"A177T"), 
                               c("HS", 211,"V185G"),
-                              c("MM",203,"A177T"))
+                              c("MM",203,"A174T"))
 inpmsa_RNASEH2C <- "./data/reordered_for_msavisr_RNASEH2CAln.fa"
 inpmsa_RNASEH2C_ggmsa <- "./data/reordered_for_ggmsa_RNASEH2CAln.fa"
 multfeatures_RNASEH2C <- list(c("HS", 106,"R69W"), 
                               c("HS", 182,"K143I"))
 inpmsa_AGO2 <- "./data/reordered_for_msavisr_AGO2Aln.fa"
 inpmsa_AGO2_ggmsa <- "./data/reordered_for_ggmsa_AGO2Aln.fa"
-multfeatures_AGO2 <- list(c("HS", 605,"L192P"), 
-                          c("HS", 774,"T357M"),
-                          c("HS", 781,"M364T"),
-                          c("HS", 1181,"C751Y"),
-                          c("HS", 1163,"G733R"),
-                          c("HS", 566,"F182del"),
-                          c("MM",566,"F182del"))
+# multfeatures_AGO2 <- list(c("HS", 605,"L192P"), 
+#                           c("HS", 774,"T357M"),
+#                           c("HS", 781,"M364T"),
+#                           c("HS", 1181,"C751Y"),
+#                           c("HS", 1163,"G733R"),
+#                           c("HS", 566,"F182del"),
+#                           c("MM",566,"F182del"))
+
+multfeatures_AGO2 <- list(c("HS", 369,"L192P"), 
+                          c("HS", 535,"T357M"),
+                          c("HS", 542,"M364T"),
+                          c("HS", 945,"C751Y"),
+                          c("HS", 927,"G733R"),
+                          c("HS", 330,"F182del"),
+                          c("CE",330,"F180del"))
 inpmsa_DICER1 <- "./data/reordered_for_msavisr_DICER1Aln.fa"
 inpmsa_DICER1_ggmsa <- "./data/reordered_for_ggmsa_DICER1Aln.fa"
 multfeatures_DICER1 <- list(c("HS", 2248,"D1713V"), 
@@ -76,10 +84,10 @@ multfeatures_ELAC2 <- list(c("HS",264 ,"R211X"),
                            c("HS",707,"H548Afs"), 
                            c("HS",987,"R781H"), 
                            c("HS",805,"E622V"), 
-                           c("MM",700,"A541T"),
-                           c("DM",198,"F154L"),
-                           c("DM",678 ,"T520I"), 
-                           c("SC",678 ,"T520I") 
+                           c("MM",700,"A537T"),
+                           c("DM",198,"F155L"),
+                           c("DM",678 ,"T494I"), 
+                           c("SC",678 ,"T513I") 
 )
 inpmsa_DIS3L2 <- "./data/reordered_for_msavisr_DIS3L2Aln.fa"
 inpmsa_DIS3L2_ggmsa <- "./data/reordered_for_ggmsa_DIS3L2Aln.fa"
@@ -88,7 +96,7 @@ multfeatures_DIS3L2 <- list(c("HS", c(470:580),"82.8-KB DEL EX6DEL"),
                             c("HS", 891,"C489Y"),
                             c("HS", c(1167:1205),"EX19DEL"),
                             c("DM",7 ,"V7GfsX10"), 
-                            c("MM",c(707:767),"22-KB DEL EX9DEL"))
+                            c("MM",c(707:767),"22-KB DEL"))
 inpmsa_RNASET2 <- "./data/reordered_for_msavisr_RNASET2Aln.fa"
 inpmsa_RNASET2_ggmsa <- "./data/reordered_for_ggmsa_RNASET2Aln.fa"
 multfeatures_RNASET2 <- list(c("HS", c(99:113),"2.5-KB DEL"), 
@@ -105,6 +113,7 @@ multfeatures_PARN  <- list(c("HS",403,"A383V"),
                            c("HS",302,"N288KfsX23"),
                            c("HS",c(222:234),"PARTIAL R3H_DEL"),
                            c("HS",363,"R349W R307VfsX22"),
+                           c("HS",321,"R349W R363V;Dfs"),
                            c("HS",c(321:437),"22-KB DEL"),
                            c("HS",190,"Q177X"),
                            c("HS",201,"I188IfsX7 CAF1"),
@@ -120,7 +129,6 @@ multfeatures_PRORP <- list(c("HS",549,"A485V"),
                            c("HS",472,"A414V"),
                            c("DM",207,"Y121D"),
                            c("DM",586,"W465R"))
-
 
 
 #Identify positions for ALL aminoacids in updated aligned seq
@@ -159,8 +167,12 @@ mapAminoAcidPositions <- function(original_seq, aligned_seq) {
 
 # Server logic
 server <- function(input, output, session) {
-  rv <- reactiveValues(display = FALSE)
+  rv <- reactiveValues(display = FALSE, visualizeClicked = FALSE, highlightClicked = FALSE, lastVisualizedRnase = NULL, isRnaseVisualized = FALSE)
   reactiveData <- reactive({
+    if (!rv$visualizeClicked) {
+      return(NULL)  # Return NULL if visualizeBtn has not been clicked
+    }
+    req(rv$visualizeClicked)
     rnaseSeq <- switch(input$rnase, 
                        RNASEH1 = inpmsa_RNASEH1_ggmsa, 
                        RNASEH2A = inpmsa_RNASEH2A_ggmsa,
@@ -175,31 +187,55 @@ server <- function(input, output, session) {
                        DIS3L2 = inpmsa_DIS3L2_ggmsa
     )
     original_seq <- readRDS(sprintf("./data/%s_raw_seq.rds", input$rnase))
-    original_seq <- as.character(original_seq$Homo_sapiens)
-    # original_seq <- switch(input$rnase, 
-    #                        RNASEH1 = as.character(RNASEH1$Homo_sapiens), 
-    #                        RNASEH2A = as.character(RNASEH2A$Homo_sapiens),
-    #                        RNASEH2B = as.character(RNASEH2B$Homo_sapiens),
-    #                        RNASEH2C = as.character(RNASEH2C$Homo_sapiens),
-    #                        AGO2 = as.character(AGO2$Homo_sapiens),
-    #                        DICER1 = as.character(DICER1$Homo_sapiens),
-    #                        RNASET2 = as.character(RNASET2$Homo_sapiens),
-    #                        PARN = as.character(PARN$Homo_sapiens),
-    #                        ELAC2 = as.character(ELAC2$Homo_sapiens),
-    #                        PRORP = as.character(PRORP$Homo_sapiens),
-    #                        DIS3L2 = as.character(DIS3L2$Homo_sapiens)
-    # )
+    original_seq <- switch(input$referenceOrganism,
+                           'Homo sapiens' = as.character(original_seq$Homo_sapiens),
+                           'Mus musculus' = as.character(original_seq$Mus_musculus),
+                           'Rattus norvegicus' = as.character(original_seq$Rattus_norvegicus),
+                           'Danio rerio' = as.character(original_seq$Danio_rerio),
+                           'Xenopus tropicalis' = as.character(original_seq$Xenopus_tropicalis),
+                           'Caenorhabditis elegans' = as.character(original_seq$Caenorhabditis_elegans),
+                           'Drosophila melanogaster' = as.character(original_seq$Drosophila_melanogaster),
+                           'Saccharomyces cerevisiae' = as.character(original_seq$Saccharomyces_cerevisiae)
+    )
+    
     aligned_seq <- readAAStringSet(rnaseSeq)
-    aligned_seq <- as.character(aligned_seq$HS)
+    aligned_seq <- switch(input$referenceOrganism,
+                          'Homo sapiens' = as.character(aligned_seq$HS),
+                          'Mus musculus' = as.character(aligned_seq$MM),
+                          'Rattus norvegicus' = as.character(aligned_seq$RN),
+                          'Danio rerio' = as.character(aligned_seq$DR),
+                          'Xenopus tropicalis' = as.character(aligned_seq$XT),
+                          'Caenorhabditis elegans' = as.character(aligned_seq$CE),
+                          'Drosophila melanogaster' = as.character(aligned_seq$DM),
+                          'Saccharomyces cerevisiae' = as.character(aligned_seq$SC)
+    )
+    
     list(
       rnaseSeq = rnaseSeq,
       position_mapping = mapAminoAcidPositions(original_seq, aligned_seq)
     )
   })
+  
+  observeEvent(input$rnase, {
+    rv$isRnaseVisualized <- FALSE  # Reset the flag when RNase is changed
+    rv$visualizeClicked <- FALSE  # Reset the visualize clicked flag when RNase is changed
+    rv$highlightClicked <- FALSE  # Reset the highlight clicked flag when RNase is changed
+  })
   # Mutation Analysis
   
   # Reactive data to store aligned positions and corresponding amino acid
   aligned_data <- eventReactive(input$highlightMutation, {
+    req(rv$visualizeClicked)  # Ensure visualizeBtn was clicked before proceeding
+    
+    # if (!rv$visualizeClicked) {
+    #   showModal(modalDialog(
+    #     title = "Visualization Required",
+    #     "Please, first visualize RNase before highlighting a position.",
+    #     footer = NULL
+    #   ))
+    #   return(NULL)  # Return NULL to prevent further processing
+    # }
+    
     # Ensure the mapping data is available and input is valid
     validate(
       need(reactiveData()$position_mapping, "Position mapping not available."),
@@ -213,6 +249,7 @@ server <- function(input, output, session) {
     if (is.na(aligned_info$Aligned_position)) {
       return(list(aligned_position = NA, original_position = input$mutationPos, aligned_amino = NA))
     }
+    rv$highlightClicked <- TRUE
     
     list(
       aligned_position = aligned_info$Aligned_position,
@@ -221,11 +258,27 @@ server <- function(input, output, session) {
     )
   })
   
+  observe({
+    if (!rv$visualizeClicked) {
+      shinyjs::disable("highlightMutation")
+    } else {
+      shinyjs::enable("highlightMutation")
+    }
+  })
+  
+  
   observeEvent(input$visualizeBtn, {
+    rv$visualizeClicked <- TRUE
+    rv$highlightClicked <- FALSE  # Reset highlightClicked
+    rv$display <- TRUE
+    rv$isRnaseVisualized <- TRUE  # Set the flag to indicate that the RNase has been visualized
+    # Save the last visualized RNase
+    rv$lastVisualizedRnase <- input$rnase
+    # Update the plots and UI elements based on the selected RNase
+    #updatePlotsAndUI(input, output, session, rv)
     rnase <- input$rnase  # get the selected RNAse
     img_path <- sprintf("images/%s.png", rnase)  
-    # When the button is clicked, set the reactive value to TRUE
-    rv$display <- TRUE
+    shinyjs::enable("highlightMutation")  # Enable the Highlight button after visualization
     # Based on selected RNase, load the corresponding MSA file and features
     rnase_data <- switch(input$rnase,
                          "RNASEH1" = list(file = inpmsa_RNASEH1, features = multfeatures_RNASEH1,
@@ -258,23 +311,35 @@ server <- function(input, output, session) {
                          "PRORP" = list(file = inpmsa_PRORP, features = multfeatures_PRORP,
                                         colors=c("MediumBlue", "DarkRed", "DarkOliveGreen", "DarkMagenta", "SaddleBrown", 
                                                  "FireBrick", "Navy", "DarkCyan", "Yellow3", "Maroon", "DarkSlateBlue") ) )
+    # Update choices for referenceOrganism based on rnase
+    organism_choices <- switch(input$rnase,
+                               "RNASEH1" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                             "Caenorhabditis elegans", "Drosophila melanogaster", "Saccharomyces cerevisiae"),
+                               "RNASEH2A" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                              "Caenorhabditis elegans", "Drosophila melanogaster", "Saccharomyces cerevisiae"),
+                               "RNASEH2B" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                              "Caenorhabditis elegans", "Drosophila melanogaster"),
+                               "RNASEH2C" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                              "Caenorhabditis elegans", "Drosophila melanogaster"),
+                               "AGO2" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                          "Caenorhabditis elegans", "Drosophila melanogaster"),
+                               "DICER1" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                            "Caenorhabditis elegans", "Drosophila melanogaster"),
+                               "ELAC2" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                           "Caenorhabditis elegans", "Drosophila melanogaster", "Saccharomyces cerevisiae"),
+                               "DIS3L2" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                            "Caenorhabditis elegans", "Drosophila melanogaster", "Saccharomyces cerevisiae"),
+                               "RNASET2" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                             "Caenorhabditis elegans", "Drosophila melanogaster", "Saccharomyces cerevisiae"),
+                               "PARN" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                          "Caenorhabditis elegans"),
+                               "PRORP" = c("Homo sapiens", "Mus musculus", "Rattus norvegicus", "Danio rerio", "Xenopus tropicalis",
+                                           "Caenorhabditis elegans", "Drosophila melanogaster", "Saccharomyces cerevisiae")
+    )
     
-    # rnase_tree <- switch(input$rnase,
-    #                      "RNASEH1" = RNASEH1Tree_plot,
-    #                      "RNASEH2A" = RNASEH2ATree_plot,
-    #                      "RNASEH2B" = RNASEH2BTree_plot,
-    #                      "RNASEH2C" = RNASEH2CTree_plot,
-    #                      "AGO2" = AGO2Tree_plot,
-    #                      "DICER1" = DICER1Tree_plot,
-    #                      "ELAC2" = ELAC2Tree_plot,
-    #                      "DIS3L2" = DIS3L2Tree_plot,
-    #                      "RNASET2" = RNASET2Tree_plot,
-    #                      "PARN" = PARNTree_plot,
-    #                      "PRORP" = PRORPTree_plot)
+    updateSelectInput(session, "referenceOrganism", choices = organism_choices, selected = "Homo sapiens")
+    
     rnase_tree <- readRDS(sprintf("./data/%s_tree.rds", input$rnase))
-    #rnase_info_html <- "<strong>Test</strong>: This is a <a href='https://example.com' target='_blank'>link</a>."
-    
-    
     
     rnase_info_html  <- switch(input$rnase,
                                "RNASEH1"=paste0("<strong><em>RNASEH1</em></strong> plays a key role in DNA replication and repair, 
@@ -391,7 +456,7 @@ server <- function(input, output, session) {
                                "PARN"=paste0("<strong><em>PARN</em></strong> encodes a poly(A)-specific ribonuclease affecting mRNA stability and telomere maintenance, associated with <a href='https://www.omim.org/entry/616353' 
                                              target='_blank'><strong>dyskeratosis congenita, autosomal recessive 6</strong></a> (mutations include <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170484.4/?redir=rcv' 
                                              target='_blank'><strong>A383V</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170485.4/?redir=rcv' target='_blank'><strong>PARTIAL EX13DEL</strong></a>, 
-                                             PARTIAL R3H_DEL and <a href='https://www.ncbi.nlm.nih.gov/clinvar/variation/190291/' target='_blank'><strong>N288KfsX23</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203540.1/?redir=rcv' 
+                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/variation/190291/' target='_blank'><strong>PARTIAL R3H_DEL and  N288KfsX23</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203540.1/?redir=rcv' 
                                              target='_blank'><strong>R349W R307VfsX22</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203556.2/?redir=rcv' target='_blank'><strong>22-KB DEL</strong></a>) 
                                              and <a href='https://www.omim.org/entry/616371' target='_blank'><strong>pulmonary fibrosis and/or bone marrow failure syndrome, telomere-related, 4</strong></a>(mutations include 
                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170589.3/?redir=rcv' target='_blank'><strong>IVS4AS A-G -2</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170590.2/?redir=rcv' 
@@ -462,6 +527,9 @@ server <- function(input, output, session) {
       rnaseSeq <- reactiveData()$rnaseSeq
       selectedPosition <- 1 
       output$mutationPlot <- renderPlot({
+        if (!rv$highlightClicked && !rv$isRnaseVisualized) {
+          return(NULL)  # Do not render the plot if neither condition is met
+        }
         tryCatch({
           msaData <- readAAStringSet(rnaseSeq, format = "fasta")
           seqLength <- width(msaData[1])
@@ -475,6 +543,10 @@ server <- function(input, output, session) {
         })
       })
     })
+    # # Clear alignedPosInfo when visualizeBtn is clicked
+    # output$alignedPosInfo <- renderText({
+    #   ""
+    # })
     
   })
   output$mainPanelSegments <- renderUI({
@@ -517,52 +589,123 @@ server <- function(input, output, session) {
     }
   })
   
-  
+  # observeEvent(input$rnase, {
+  #   if (!rv$isRnaseVisualized || input$rnase != rv$lastVisualizedRnase) {
+  #     return()  # Do nothing if the RNase is changed without visualization
+  #   }
+  #   
+  # })
   
   
   
   # Mutation Plot
-  observeEvent(input$highlightMutation, {
-    data <- aligned_data()  # Using the reactive aligned_data
-    
-    output$mutationPlot <- renderPlot({
-      req(data)  # Ensure data is not NULL
-      if (is.na(data$aligned_position)) {
-        plot.new()
-        
-        return()
-      }
-      
-      tryCatch({
-        msaData <- readAAStringSet(reactiveData()$rnaseSeq, format = "fasta")
-        seqLength <- width(msaData[1])
-        if (seqLength >= data$aligned_position && data$aligned_position > 0) {
-          ggmsa(msaData, color = "LETTER", seq_name = TRUE, by_conservation = TRUE,
-                start = max(1, data$aligned_position - 2), end = min(seqLength, data$aligned_position + 2),
-                font = "TimesNewRoman", position_highlight = data$aligned_position)+theme(text = element_text(size = 25))
-        }
-      }, error = function(e) {
-        plot.new()
-        text(0.5, 0.5, "An error occurred.", cex = 1.2, col = "red")
-      })
-    })
-  })
   
+  observeEvent(input$highlightMutation, {
+    # if (!rv$visualizeClicked) {
+    #   showModal(modalDialog(
+    #     title = "Visualization Required",
+    #     "Please, first visualize RNase before highlighting a position.",
+    #     easyClose = TRUE,
+    #     footer = NULL
+    #   ))
+    #   return()  # Do nothing further
+    # }
+    # 
+    # if (input$rnase != rv$lastVisualizedRnase) {
+    #   return()  # Do nothing if the selected RNase is different from the last visualized RNase
+    # }
+    # if (!rv$isRnaseVisualized) {
+    #   return()  # Do nothing if the RNase has not been visualized
+    # }
+    if (!rv$isRnaseVisualized) {
+      return()  # Do nothing if the RNase has not been visualized
+    }
+    if (rv$visualizeClicked && rv$lastVisualizedRnase == input$rnase && rv$isRnaseVisualized) {
+      #if (rv$visualizeClicked ) {
+      data <- aligned_data()  # Using the reactive aligned_data
+      
+      output$mutationPlot <- renderPlot({
+        req(data)  # Ensure data is not NULL
+        req(rv$visualizeClicked)  # Ensure visualizeBtn was clicked before rendering
+        
+        # if (!rv$highlightClicked) {
+        #   return(NULL)  # Do not render the plot if highlightMutation has not been clicked
+        # }
+        if (is.na(data$aligned_position)) {
+          plot.new()
+          return()
+        }
+        if (!rv$highlightClicked && !rv$isRnaseVisualized) {
+          return(NULL)  # Do not render the plot if neither condition is met
+        }
+        
+        tryCatch({
+          msaData <- readAAStringSet(reactiveData()$rnaseSeq, format = "fasta")
+          seqLength <- width(msaData[1])
+          
+          if (data$aligned_position == 1) {
+            start <- 1
+            end <- min(seqLength, data$aligned_position + 4)
+          } else if (data$aligned_position == 2) {
+            start <- 1
+            end <- min(seqLength, data$aligned_position + 3)
+          } else if ((seqLength - data$aligned_position) == 1) {
+            start <- max(1, data$aligned_position - 4)
+            end <- seqLength
+          } else if ((seqLength - data$aligned_position) == 2) {
+            start <- max(1, data$aligned_position - 3)
+            end <- seqLength
+          } else {
+            start <- max(1, data$aligned_position - 2)
+            end <- min(seqLength, data$aligned_position + 2)
+          }
+          
+          if (seqLength >= data$aligned_position && data$aligned_position > 0) {
+            ggmsa(msaData, color = "LETTER", seq_name = TRUE, by_conservation = TRUE,
+                  start = start, end = end,
+                  font = "TimesNewRoman", position_highlight = data$aligned_position) +
+              theme(text = element_text(size = 25))
+          }
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, "An error occurred.", cex = 1.2, col = "red")
+        })
+      })
+    }
+  })
+  observeEvent(input$rnase, {
+    rv$isRnaseVisualized <- FALSE  # Reset the flag when RNase is changed
+    
+    # Optionally, clear the mutation plot or take other actions
+  })
   # Aligned Position Info Text
   output$alignedPosInfo <- renderText({
+    req(rv$highlightClicked)  # Only render if highlightMutation has been clicked
     req(aligned_data())  # Ensure aligned_data is not NULL
+    req(rv$visualizeClicked)  # Ensure visualizeBtn was clicked before rendering
+    
     if (is.na(aligned_data()$aligned_position)) {
       return("Selected position is outside the sequence boundaries.")
     }
     
-    paste("Amino acid", aligned_data()$aligned_amino, "at reference position", aligned_data()$original_position,
-          "is aligned at position", aligned_data()$aligned_position, "and is highlighted.")
+    paste(
+      "<div style='border: 1px solid #ccc; padding: 10px;'>",
+      "Amino acid <b>", aligned_data()$aligned_amino, "</b> at reference position <b>",
+      aligned_data()$original_position, "</b> is aligned at position <b>",
+      aligned_data()$aligned_position, "</b> and is highlighted.",
+      "</div>"
+    )
   })
   
   
   
   observeEvent(input$plot_click, {
+    if (input$rnase != rv$lastVisualizedRnase) {
+      return()  # Do nothing if the selected RNase is different from the last visualized RNase
+    }
     # Ensure the reactive data exists and is not null
+    rv$highlightClicked <- FALSE  # Reset highlightClicked
+    #output$alignedPosInfo <- renderText({ "" })
     req(reactiveData()$rnaseSeq)
     # Extract the necessary data from the reactive environment
     rnaseSeq <- reactiveData()$rnaseSeq
@@ -572,13 +715,33 @@ server <- function(input, output, session) {
       tryCatch({
         msaData <- readAAStringSet(rnaseSeq, format = "fasta")
         seqLength <- width(msaData[1])
+        
+        if (selectedPosition == 1) {
+          start <- 1
+          end <- min(seqLength, selectedPosition + 4)
+        } else if (selectedPosition == 2) {
+          start <- 1
+          end <- min(seqLength, selectedPosition + 3)
+        } else if ((seqLength - selectedPosition) == 1) {
+          start <- max(1, selectedPosition - 4)
+          end <- seqLength
+        } else if ((seqLength - selectedPosition) == 2) {
+          start <- max(1, selectedPosition - 3)
+          end <- seqLength
+        } else {
+          start <- max(1, selectedPosition - 2)
+          end <- min(seqLength, selectedPosition + 2)
+        }
+        
         if (!is.null(msaData) && seqLength >= selectedPosition && selectedPosition > 0) {
-          ggmsa(msaData, color = "LETTER",seq_name = TRUE, by_conservation = TRUE,
-                start = max(1, selectedPosition - 2), end = min(seqLength, selectedPosition + 2),
-                font = "TimesNewRoman", position_highlight = selectedPosition)+theme(text = element_text(size = 25))
+          ggmsa(msaData, color = "LETTER", seq_name = TRUE, by_conservation = TRUE,
+                start = start, end = end,
+                font = "TimesNewRoman", position_highlight = selectedPosition) + 
+            theme(text = element_text(size = 25))
         }
       }, error = function(e) {
-        
+        plot.new()
+        text(0.5, 0.5, "An error occurred.", cex = 1.2, col = "red")
       })
     })
     
@@ -588,3 +751,7 @@ server <- function(input, output, session) {
   
   
 }
+# # Function to update plots and UI elements
+# updatePlotsAndUI <- function(input, output, session, rv) {
+#   # Add your plot and UI updating logic here, similar to the existing code in your `observeEvent(input$visualizeBtn, {...})`
+# }
