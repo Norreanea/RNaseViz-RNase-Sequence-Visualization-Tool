@@ -23,5 +23,5 @@ To use the RNaseViz application:
 
 ## Contact
 
-For questions or support, please open an issue on this [GitHub repository][(https://github.com/Norreanea/RNaseViz-RNase-Sequence-Visualization-Tool/issues)].
+For questions or support, please open an issue on this [GitHub repository](https://github.com/Norreanea/RNaseViz-RNase-Sequence-Visualization-Tool/issues).
 
