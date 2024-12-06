@@ -14,12 +14,14 @@ https://norreanea.shinyapps.io/RNaseViz/
 
 To use the RNaseViz application:
 
-1. **Select RNase**: From the dropdown menu labeled "Choose RNase:", select the RNase enzyme you wish to analyze.
-2. **Visualize**: Click the 'Visualize' button to load the sequence data and related visualizations.
-3. **Highlight Mutation**: Use the "Select organism:" dropdown to choose the organism of interest, enter a position number in the reference sequence, and click 'Highlight position' to view specific mutations.
-4. **Explore Tree**: The displayed tree structure allows you to explore how different RNase sequences relate to different species.
-5. **Inspect Mutations**: The sequence visualization will show highlighted regions corresponding to entered mutations.
-6. **Download Global Alignment**: Download sequence alignments in FASTA or PDF formats for offline analysis.
+1. **Visualize**: From the dropdown menu labeled "Choose RNase:", select the RNase enzyme you wish to analyze and click the 'Visualize' button.
+2. **Highlight Mutation**: Use the "Select organism:" dropdown to choose the organism of interest, enter a position number in the reference sequence, and click 'Highlight position' to view specific mutations.
+3. **RNase info**: Provides in-depth information about the selected RNase enzyme, including the potential molecular consequences of its mutations.
+4. **Residue Highlighting**: Highlights the specified residue within the sequence alignment, along with the two adjacent residues on either side, to emphasize key positions.
+5. **Explore Tree**: The displayed tree structure allows you to explore how different RNase sequences relate to different species.
+6. **Inspect Residues**: Select and highlight any residue within the sequence alignment for detailed examination and analysis.
+7. **Download Global Alignment**: Download sequence alignments in FASTA or PDF formats for offline analysis.
+![Figure2](https://github.com/user-attachments/assets/c43109ba-74c9-4e5b-98e7-6e06c615b9f2)
 
 ## Contact
 
