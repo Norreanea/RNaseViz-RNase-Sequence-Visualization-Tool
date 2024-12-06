@@ -14,13 +14,14 @@ https://norreanea.shinyapps.io/RNaseViz/
 
 To use the RNaseViz application:
 
-1. **Select RNase**: Choose an RNase enzyme from the dropdown menu to begin the analysis.
+1. **Select RNase**: From the dropdown menu labeled "Choose RNase:", select the RNase enzyme you wish to analyze.
 2. **Visualize**: Click the 'Visualize' button to load the sequence data and related visualizations.
-3. **Highlight Mutation**: Enter a position number in the human reference sequence and click 'Highlight position' to view specific mutations.
-4. **Explore Tree**: Click on different parts of the phylogenetic tree to see detailed evolutionary relationships.
+3. **Highlight Mutation**: Use the "Select organism:" dropdown to choose the organism of interest, enter a position number in the reference sequence, and click 'Highlight position' to view specific mutations.
+4. **Explore Tree**: The displayed tree structure allows you to explore how different RNase sequences relate to different species.
 5. **Inspect Mutations**: The sequence visualization will show highlighted regions corresponding to entered mutations.
+6. **Download Global Alignment**: Download sequence alignments in FASTA or PDF formats for offline analysis.
 
 ## Contact
 
-For questions or support, please open an issue on this [GitHub repository](https://github.com/username/RNaseViz).
+For questions or support, please open an issue on this [GitHub repository][(https://github.com/username/RNaseViz)](https://github.com/Norreanea/RNaseViz-RNase-Sequence-Visualization-Tool/issues).
 
