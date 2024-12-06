@@ -1,5 +1,7 @@
 # Load libraries
 #install.packages("rsvg")
+library(BiocManager)
+BiocManager::install(update = TRUE, ask = FALSE)
 library(shiny)
 library(seqvisr)
 library(msa)
@@ -13,7 +15,7 @@ library(ggiraph)
 library(Biostrings)
 library(ggrepel)
 library(rsvg)
-
+library(shiny.semantic)
 
 # Load all msa and annotation
 inpmsa_RNASEH1 <- "./data/reordered_for_msavisr_RNASEH1Aln.fa"
@@ -35,7 +37,8 @@ inpmsa_RNASEH2B <- "./data/reordered_for_msavisr_RNASEH2BAln.fa"
 inpmsa_RNASEH2B_ggmsa <- "./data/reordered_for_ggmsa_RNASEH2BAln.fa"
 multfeatures_RNASEH2B <- list(c("HS", 203,"A177T"), 
                               c("HS", 211,"V185G"),
-                              c("MM",203,"A174T"))
+                              c("MM",203,"A174T"),
+                              c("MM",234,"E202X"))
 inpmsa_RNASEH2C <- "./data/reordered_for_msavisr_RNASEH2CAln.fa"
 inpmsa_RNASEH2C_ggmsa <- "./data/reordered_for_ggmsa_RNASEH2CAln.fa"
 multfeatures_RNASEH2C <- list(c("HS", 106,"R69W"), 
@@ -62,7 +65,7 @@ inpmsa_DICER1_ggmsa <- "./data/reordered_for_ggmsa_DICER1Aln.fa"
 multfeatures_DICER1 <- list(c("HS", 2248,"D1713V"), 
                             c("HS", 2244,"D1709Y"),
                             c("HS", 316,"E292fs"),
-                            c("HS", c(1069:1075),"2457C-G DEL"),
+                            c("HS", c(1069:1075),"I813_Y819del PAZ"),
                             c("HS", 1095,"S839F"),
                             c("HS", 2115,"L1583R"),
                             c("HS", 599,"E503X"),
@@ -70,9 +73,10 @@ multfeatures_DICER1 <- list(c("HS", 2248,"D1713V"),
                             c("HS", 1054,"T798fs"),
                             c("HS", 640,"R544X "),
                             c("HS", 1835,"L1303VfsX4"),
-                            c("HS", 1632,"Y1204LfsTer29"),
-                            c("HS", c(1143:1193),"EX18DEL"),
-                            c("DM",1205,"Q1147X"))
+                            c("HS", 1632,"Y1204LfsX29"),
+                            c("HS", c(1143:1193),"EX18del"),
+                            c("DM",1205,"Q1147X"),
+                            c("HS",2365,"S1826X"))
 inpmsa_ELAC2 <- "./data/reordered_for_msavisr_ELAC2Aln.fa"
 inpmsa_ELAC2_ggmsa <- "./data/reordered_for_ggmsa_ELAC2Aln.fa"
 multfeatures_ELAC2 <- list(c("HS",264 ,"R211X"),
@@ -91,16 +95,16 @@ multfeatures_ELAC2 <- list(c("HS",264 ,"R211X"),
 )
 inpmsa_DIS3L2 <- "./data/reordered_for_msavisr_DIS3L2Aln.fa"
 inpmsa_DIS3L2_ggmsa <- "./data/reordered_for_ggmsa_DIS3L2Aln.fa"
-multfeatures_DIS3L2 <- list(c("HS", c(470:580),"82.8-KB DEL EX6DEL"), 
-                            c("HS", c(707:767),"22-KB DEL EX9DEL"),
+multfeatures_DIS3L2 <- list(c("HS", c(470:580),"82.8-KB del EX6del"), 
+                            c("HS", c(707:767),"22-KB del EX9del RNB"),
                             c("HS", 891,"C489Y"),
-                            c("HS", c(1167:1205),"EX19DEL"),
+                            c("HS", c(1167:1205),"EX19del"),
                             c("DM",7 ,"V7GfsX10"), 
-                            c("MM",c(707:767),"22-KB DEL"))
+                            c("MM",c(707:767),"22-KB del EX10del"))
 inpmsa_RNASET2 <- "./data/reordered_for_msavisr_RNASET2Aln.fa"
 inpmsa_RNASET2_ggmsa <- "./data/reordered_for_ggmsa_RNASET2Aln.fa"
-multfeatures_RNASET2 <- list(c("HS", c(99:113),"2.5-KB DEL"), 
-                             c("HS", c(36:40),"15-BP DEL"),
+multfeatures_RNASET2 <- list(c("HS", c(99:113),"2.5-KB del"), 
+                             c("HS", c(36:40),"15-BP del"),
                              c("HS", 372,"C184R"),
                              c("HS", 377,"Q189Q Q[CAG]>Q[CAA]"),
                              c("CE", 2219,"G119E"),
@@ -108,13 +112,13 @@ multfeatures_RNASET2 <- list(c("HS", c(99:113),"2.5-KB DEL"),
 inpmsa_PARN <- "./data/reordered_for_msavisr_PARNAln.fa"
 inpmsa_PARN_ggmsa <- "./data/reordered_for_ggmsa_PARNAln.fa"
 multfeatures_PARN  <- list(c("HS",403,"A383V"), 
-                           c("HS",c(295:320),"PARTIAL EX13DEL"),
+                           c("HS",c(295:320),"PARTIAL ND2 del"),
                            c("HS",295,"G281TfsX4"),
                            c("HS",302,"N288KfsX23"),
-                           c("HS",c(222:234),"PARTIAL R3H_DEL"),
-                           c("HS",363,"R349W R307VfsX22"),
-                           c("HS",321,"R349W R363V;Dfs"),
-                           c("HS",c(321:437),"22-KB DEL"),
+                           c("HS",c(222:234),"PARTIAL R3H del"),
+                           c("HS",363,"R349W"),
+                           c("HS",321,"D307VfsX22"),
+                           c("HS",c(321:437),"EX14_18del"),
                            c("HS",190,"Q177X"),
                            c("HS",201,"I188IfsX7 CAF1"),
                            c("HS",445,"K421R"))
@@ -359,9 +363,9 @@ server <- function(input, output, session) {
                                                  with <a href='https://www.omim.org/entry/610333' target='_blank'><strong>Aicardi-Goutieres syndrome 4</strong></a>. 
                                                  The gene carries mutations such as <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000004904.5/?redir=rcv' 
                                                  target='_blank'><strong>G37S</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056302.8/?redir=rcv' 
-                                                 target='_blank'><strong>R25R R[CGC]>R[CGT]</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056303.6/?redir=rcv'
+                                                 target='_blank'><strong>R25R</strong></a> R[CGC]>R[CGT], <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056303.6/?redir=rcv'
                                                  target='_blank'><strong>R235Q</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056304.9/?redir=rcv' 
-                                                 target='_blank'><strong>V23V V[GTG]>V[GTA]</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056305.8/?redir=rcv' 
+                                                 target='_blank'><strong>V23V</strong></a> V[GTG]>V[GTA], <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056305.8/?redir=rcv' 
                                                  target='_blank'><strong>R186W</strong></a>, and <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001304321.4/?redir=rcv' 
                                                  target='_blank'><strong>N212I</strong></a>. Mouse models with the G37S mutation exhibit perinatal lethality and activation of the innate 
                                                  immune response through the cGAS-STING pathway, driven by gene's failure to adequately remove misincorporated 
@@ -386,7 +390,7 @@ server <- function(input, output, session) {
                                                  <em>RNASEH2C</em> knock-out in mice results in embryonic lethality due to severe DNA damage from ribonucleotide misincorporation, triggering an extensive DNA 
                                                  damage response and leading to significant developmental anomalies and early embryonic death. In yeast, the K46W mutation 
                                                  (corresponding to human R69W) shows increased frequencies of cytosine and guanine ribonucleotides (rC and rG), notably accumulating rCMP at 
-                                                 specific genomic sites, highlighting the challenges in efficiently removing rCMP from DNA (note: RNASEH2C ortholog has not been designated as trusted by the Alliance of Genome Resources)."),
+                                                 specific genomic sites, highlighting the challenges in efficiently removing rCMP from DNA (note: yeast RNASEH2C ortholog has not been designated as trusted by the Alliance of Genome Resources)."),
                                
                                "AGO2"=paste0("<strong><em>AGO2</em></strong> is essential for miRNA and siRNA-guided mRNA cleavage. Associated with
                                              <a href='https://www.omim.org/entry/619149' target='_blank'><strong>Lessel-Kreienkamp syndrome (LESKRES)</strong></a>, mutations 
@@ -395,7 +399,7 @@ server <- function(input, output, session) {
                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001289985.1/?redir=rcv' target='_blank'><strong>M364T</strong></a>, 
                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001289986.1/?redir=rcv' target='_blank'><strong>C751Y</strong></a>, 
                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001289988.1/?redir=rcv' target='_blank'><strong>G733R</strong></a>, 
-                                             and <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001289987.1/?redir=rcv' target='_blank'><strong>F182del</strong></a>. 
+                                             and <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001289987.1/?redir=rcv' target='_blank'><strong>3-BP DEL, NT544</strong></a> (resulting in the deletion F182del). 
                                              Similarity in mutation sites between human <em>AGO2</em> and <em>C. elegans</em> <em>alg-1</em>, specifically the F180del  in <em>alg-1</em> and its analogous F182del in h<em>AGO2</em>, allows us to infer the impact of 
                                              <em>AGO2</em> mutations through studies on <em>AGO1</em>. This homology indicates that mutations like F182del in <em>AGO2</em> could lead to enhanced mRNA binding and stalling at miRNA-mRNA hybrids, impairing 
                                              RISC loading and functionality. Such disruptions are suggestive of the molecular dysfunctions that contribute to the neurological and developmental symptoms observed in LESKRES, 
@@ -405,19 +409,24 @@ server <- function(input, output, session) {
                                                target='_blank'><strong>L1583R</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000004726.5/?redir=rcv' 
                                                target='_blank'><strong>E503X</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000004727.5/?redir=rcv' 
                                                target='_blank'><strong>R944X</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000240963.4/?redir=rcv' 
-                                               target='_blank'><strong>T798fs</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000004729.5/?redir=rcv' 
+                                               target='_blank'><strong>1-BP INS, 2574A</strong></a> (resulting in the frameshift T798fs), 
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000023521/' 
+                                               target='_blank'><strong>S1826X</strong></a>,
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000004729.5/?redir=rcv' 
                                                target='_blank'><strong>R544X</strong></a>, <a href='https://www.omim.org/entry/618272' target='_blank'><strong>GLOW syndrome</strong></a>, 
                                                with mutations such as <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000735852.4/?redir=rcv' target='_blank'><strong>D1713V</strong></a>, 
                                                <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000735853.4/?redir=rcv' target='_blank'><strong>D1709Y</strong></a>, 
                                                <a href='https://www.omim.org/entry/138800' target='_blank'><strong>Goiter, multinodular 1, with or without Sertoli-Leydig cell tumors</strong></a>, 
-                                               with mutations <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000023523.4/?redir=rcv' target='_blank'><strong>E292fs</strong></a>, 
-                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001398192.5/?redir=rcv' target='_blank'><strong>2457C-G DEL</strong></a>, 
+                                               with mutations <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000023523.4/?redir=rcv' target='_blank'><strong>4-BP DEL, 871AAAG</strong></a> (resulting in the frameshift E292fs), 
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001398192.5/?redir=rcv' target='_blank'><strong>2457C-G</strong></a> (resulting in the deletion I813_Y819del PAZ), 
                                                <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000023526.4/?redir=rcv' target='_blank'><strong>S839F</strong></a>, 
-                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000023524.4/?redir=rcv' target='_blank'><strong>EX18DEL</strong></a> 
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000023524.4/?redir=rcv' target='_blank'><strong>IVS17AS, G-T, -1</strong></a> (resulting in the deletion EX18del, partial deletion of the PAZ domain) 
                                                and <a href='https://www.omim.org/entry/180295' target='_blank'><strong>rhabdomyosarcoma, embryonal, 2</strong></a>, 
-                                               with mutations including <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056332.5/?redir=rcv' target='_blank'><strong>L1303VfsX4</strong></a>, 
-                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056333.4/?redir=rcv' target='_blank'><strong>Y1204LfsTer29</strong></a>. 
-                                               In several animal models, <em>DICER1</em> deficiency leads to severe developmental defects and embryonic lethality, primarily through disrupted miRNA maturation. 
+                                               with mutations including <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056332.5/?redir=rcv' target='_blank'><strong>2-BP DEL, 3097CT</strong></a> (resulting in the frameshift L1303VfsX4), 
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056333.4/?redir=rcv' target='_blank'><strong>6-BP DEL/1-BP INS, NT3611</strong></a> (resulting in the frameshift Y1204LfsX29). 
+                                               Our analysis reveals that the <em>Dcr-1</em> Q1147X mutation in <em>D. melanogaster</em> closely mirrors the human R944X mutation in the PAZ domain. 
+                                               This fly mutation induces abnormal cell cycles, reduced cell counts, and tissue overgrowth.
+                                               Moreover, in several animal models, <em>DICER1</em> deficiency leads to severe developmental defects and embryonic lethality, primarily through disrupted miRNA maturation. 
                                                This disruption results in the accumulation of 3p-miRNA molecules as observed in human heterozygous mutations. These miRNAs may aberrantly regulate
                                                the PI3K-AKT-mTOR signalling pathway, which is crucial for cell growth and proliferation. Alterations in this pathway are linked to the 
                                                overgrowth observed in GLOW syndrome and the tumorigenic processes in the aforementioned conditions."),
@@ -427,40 +436,45 @@ server <- function(input, output, session) {
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056276.7/?redir=rcv' target='_blank'><strong>F154L</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000056277.4/?redir=rcv' 
                                               target='_blank'><strong>L423F</strong></a>), and <a href='https://www.omim.org/entry/614731' target='_blank'><strong>prostate cancer hereditary 2 (HPC2)</strong></a> (mutations including 
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000005358.3/?redir=rcv' target='_blank'><strong>S217L</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000005359.3/?redir=rcv' 
-                                              target='_blank'><strong>A541T</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000005360.2/?redir=rcv' target='_blank'><strong>H548Afs</strong></a>, 
+                                              target='_blank'><strong>A541T</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000005360.2/?redir=rcv' target='_blank'><strong>1-BP, 1641G</strong></a> (resulting in the frameshift H548Afs), 
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000005361.4/?redir=rcv' target='_blank'><strong>R781H</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000005362.4/?redir=rcv'
-                                              target='_blank'><strong>E622V</strong></a>). Mutations in <em>ELAC2</em> lead to the accumulation of unprocessed mt-tRNA molecules, disrupting mitochondrial protein synthesis and respiration, 
+                                              target='_blank'><strong>E622V</strong></a>). Furthermore, mutations F155L in flies (corresponding to human F154L) and T494I and T513I in yeast (corresponding to human T520I) disrupt mitochondrial RNA processing and 
+                                              impair respiratory chain function, leading to oxidative phosphorylation deficiencies. Mutations in <em>ELAC2</em> lead to the accumulation of unprocessed mt-tRNA molecules, disrupting mitochondrial protein synthesis and respiration, 
                                               and reducing OXPHOS complex levels. This results in decreased ATP production and increased reactive oxygen species (ROS), contributing to mitochondrial disorder in COXPD17 by affecting 
                                               energy production and inducing cellular stress. In HPC2, mutations impair both mitochondrial and nuclear RNA processing, altering cellular energy states and 
                                               activating pro-inflammatory and tumorigenesis pathways. Animal models, such as the mouse prostate-specific <em>ELAC2</em> knockout and A537T mutation models (human equivalent A541T), demonstrate 
                                               how <em>ELAC2</em> disruptions facilitate cancer progression by modifying cellular metabolism and stress responses, particularly through the altered processing of tRNAs and miRNAs."),
                                "RNASET2"=paste0("<strong><em>RNASET2</em></strong> is involved in RNA turnover and lysosomal degradation, associated with <a href='https://www.omim.org/entry/612951' 
                                                 target='_blank'><strong>cystic leukoencephalopathy</strong></a>, with mutations such as <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000440.2/?redir=rcv' 
-                                                target='_blank'><strong>C184R</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000441.4/?redir=rcv' target='_blank'><strong>2.5-KB DEL</strong></a>, 
+                                                target='_blank'><strong>C184R</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000441.4/?redir=rcv' target='_blank'><strong>2.5-KB del</strong></a>, 
                                                 <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000442/?redir=rcv' target='_blank'><strong>IVS5AS A-G -2</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000443/?redir=rcv'
-                                                target='_blank'><strong>1-BP DEL 332+1G</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000444.2/?redir=rcv' target='_blank'><strong>15-BP DEL</strong></a>,
-                                                <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000445.5/?redir=rcv' target='_blank'><strong>Q189Q Q[CAG]&gt;Q[CAA]</strong></a>. Mutations in RNASET2 cause accumulation of uncleaved ssRNA substrates, 
+                                                target='_blank'><strong>1-BP del 332+1G</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000444.2/?redir=rcv' target='_blank'><strong>15-BP del</strong></a>,
+                                                <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000000445.5/?redir=rcv' target='_blank'><strong>Q189Q</strong></a> Q[CAG]>Q[CAA]. Mutations in RNASET2 cause accumulation of uncleaved ssRNA substrates, 
                                                 notably rRNA in lysosomes, leading to lysosomal dysfunction and storage disorders, as observed in zebrafish knockouts and <em>C. elegans</em> (G119E and P55X mutations) mutants. 
                                                 This disrupts cellular stress responses and contributes to leukoencephalopathy by triggering innate immune pathways, increasing <em>IFN-1</em> and ISGs in mouse models, resulting in neuroinflammation 
                                                 and impaired phagocytosis by activated microglia. Additionally, <em>RNASET2</em> deficiency in yeast stabilizes tRNAs and prevents tRNA fragment formation, impairing oxidative stress responses and 
                                                 inhibiting apoptosis."),
                                "DIS3L2"=paste0("<strong><em>DIS3L2</em></strong>, important for RNA decay, is implicated in <a href='https://www.omim.org/entry/267000' target='_blank'><strong>Perlman syndrome</strong></a> primarily through its role in degrading 3’-uridylated 7SL ncRNA, a component of the signal recognition particle (SRP). 
-                                               Mutations include <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024119.2/?redir=rcv' target='_blank'><strong>82.8-KB DEL EX6DEL</strong></a>,
-                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024120.2/?redir=rcv' target='_blank'><strong>22-KB DEL EX9DEL</strong></a>, 
+                                               Mutations include <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024119.2/?redir=rcv' target='_blank'><strong>82.8-KB del EX6del</strong></a>,
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024120.2/?redir=rcv' target='_blank'><strong>22-KB del EX9del</strong></a> (resulting in the loss of the RNB domain), 
                                                <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024121.6/?redir=rcv' target='_blank'><strong>C489Y</strong></a>, and 
-                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024122.6/?redir=rcv' target='_blank'><strong>EX19DEL</strong></a>. 
+                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000024122.6/?redir=rcv' target='_blank'><strong>IVS19, G-A, +5</strong></a> (resulting in the deletion EX19del). 
                                                Loss-of-function mutations in <em>DIS3L2</em> observed in humans, lead to the accumulation of uridylated 7SL ncRNA, impairing signal recognition particle (SRP) 
                                                function and subsequently ER-targeted translation. This disruption results in calcium leakage from the ER, disturbing calcium homeostasis and contributing to 
-                                               the pathology of Perlman syndrome. Additionally, <em>Dis3l2</em> EX10DEL in mice (EX9DEL in human <em>DIS3L2</em>) and <em>Dis3l2</em> V7GfsX10 in flies, the failed degradation of 3’-uridylated-poly(A) 
+                                               the pathology of Perlman syndrome. Additionally, <em>Dis3l2</em> 22-KB del EX10del in mice (EX9del in human <em>DIS3L2</em>) and <em>Dis3l2</em> V7GfsX10 in flies, the failed degradation of 3’-uridylated-poly(A) 
                                                mRNAs leads to upregulation of the oncogene <em>Igf2</em>, promoting tumorigenesis."),
                                "PARN"=paste0("<strong><em>PARN</em></strong> encodes a poly(A)-specific ribonuclease affecting mRNA stability and telomere maintenance, associated with <a href='https://www.omim.org/entry/616353' 
-                                             target='_blank'><strong>dyskeratosis congenita, autosomal recessive 6</strong></a> (mutations include <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170484.4/?redir=rcv' 
-                                             target='_blank'><strong>A383V</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170485.4/?redir=rcv' target='_blank'><strong>PARTIAL EX13DEL</strong></a>, 
-                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/variation/190291/' target='_blank'><strong>PARTIAL R3H_DEL and  N288KfsX23</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203540.1/?redir=rcv' 
-                                             target='_blank'><strong>R349W R307VfsX22</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203556.2/?redir=rcv' target='_blank'><strong>22-KB DEL</strong></a>) 
+                                             target='_blank'><strong>dyskeratosis congenita, autosomal recessive 6</strong></a> 
+                                             (mutations include <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170484.4/?redir=rcv' 
+                                             target='_blank'><strong>A383V</strong></a>, 
+                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170485.4/?redir=rcv' target='_blank'><strong>IVS13DS, G-T, +1</strong></a> (resulting in the deletion PARTIAL ND2 del and the frameshift G281TfsX4), 
+                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170487/' target='_blank'><strong>4-BP DEL, 659AGTA</strong></a> (predicted to result in the deletion PARTIAL R3H del), 
+                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170486/' target='_blank'><strong>1-BP DUP, 863A</strong></a> (resulting in the frameshift N288KfsX23),
+                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203540.1/?redir=rcv' target='_blank'><strong>R349W</strong></a>, 
+                                             <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000203556.2/?redir=rcv' target='_blank'><strong>22-KB del</strong></a>) (resulting in the frameshift D307VfsX22 and the deletion EX14_18del) 
                                              and <a href='https://www.omim.org/entry/616371' target='_blank'><strong>pulmonary fibrosis and/or bone marrow failure syndrome, telomere-related, 4</strong></a>(mutations include 
                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170589.3/?redir=rcv' target='_blank'><strong>IVS4AS A-G -2</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170590.2/?redir=rcv' 
-                                             target='_blank'><strong>Q177X</strong></a>, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170591.2/?redir=rcv' target='_blank'><strong>I188IfsX7 CAF1</strong></a>, 
+                                             target='_blank'><strong>Q177X</strong></a> in CAF1 domain, <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170591.2/?redir=rcv' target='_blank'><strong>1-BP INS, 563T</strong></a> (resulting in the frameshift I188IfsX7 in CAF1 domain), 
                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000170592.2/?redir=rcv' target='_blank'><strong>K421R</strong></a>). In humans, mutations in <em>PARN</em> 
                                              result in unstable TERC RNA, leading to prematurely shortened telomeres. This reduction in telomere length initiates a DNA damage response that manifests as 
                                              cell cycle arrest, apoptosis, or premature senescence—key mechanisms underlying the pathology of these conditions. In animal models, specifically mice with 
@@ -472,10 +486,10 @@ server <- function(input, output, session) {
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001825014.1/?redir=rcv' target='_blank'><strong>N412S</strong></a>, 
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001825015.1/?redir=rcv' target='_blank'><strong>A434D</strong></a>, 
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001824883.1/?redir=rcv' target='_blank'><strong>R445Q</strong></a>, 
-                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001824884.1/?redir=rcv' target='_blank'><strong>S400IfsX6</strong></a>, 
+                                              <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV001824884.1/?redir=rcv' target='_blank'><strong>1-BP DUP, 1197A</strong></a> (resulting in the frameshift S400IfsX6), 
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV003892100.1/?redir=rcv' target='_blank'><strong>T387A</strong></a> and 
                                               <a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV002510555.2/?redir=rcv' target='_blank'><strong>A414V</strong></a>. 
-                                              In both mouse (EX3DEL) and fly models (Y121D and W465R), <em>PRORP</em> mutations lead to the accumulation of unprocessed mt-tRNA molecules. 
+                                              In both mouse (EX3del) and fly models (Y121D and W465R), <em>PRORP</em> mutations lead to the accumulation of unprocessed mt-tRNA molecules. 
                                               This results in decreased mitochondrial protein synthesis, reduced levels of OXPHOS complexes, diminished ATP production, and increased production 
                                               of reactive oxygen species (ROS), thereby inducing significant cellular stress. These molecular dysfunctions cause developmental 
                                               delays, mitochondrial dysfunction, and cardiomyopathy.")
@@ -489,6 +503,9 @@ server <- function(input, output, session) {
     # Update the UI to display RNase details
     output$rnaseInfo <- renderUI({
       HTML(paste0('<div style="margin-top:20px;">', rnase_info_html, '</div>'))
+    })
+    output$BioRender <- renderUI({
+      paste0("Created with BioRender.com")
     })
     # Sequence plot
     output$seqPlot <- renderPlot({
@@ -549,6 +566,29 @@ server <- function(input, output, session) {
     # })
     
   })
+  # Unified Download Handler based on selected format
+  output$downloadAlignment <- downloadHandler(
+    filename = function() {
+      if (input$downloadFormat == "fasta") {
+        sprintf("reordered_for_ggmsa_%sAln.fa", input$rnase)
+      } else {
+        sprintf("%s_final.pdf", input$rnase)
+      }
+    },
+    content = function(file) {
+      if (input$downloadFormat == "fasta") {
+        src <- sprintf("./data/reordered_for_ggmsa_%sAln.fa", input$rnase)
+      } else {
+        src <- sprintf("./data/%s_final.pdf", input$rnase)
+      }
+      if (file.exists(src)) {
+        file.copy(src, file)
+      } else {
+        showNotification(sprintf("%s file not found.", toupper(input$downloadFormat)), type = "error")
+      }
+    }
+  )
+  
   output$mainPanelSegments <- renderUI({
     if (rv$display) {
       shiny.semantic::segment(
@@ -576,6 +616,17 @@ server <- function(input, output, session) {
               div(class = "sixteen wide column",
                   shiny.semantic::segment(
                     plotOutput("seqPlot", height = "600px", click = "plot_click"),
+                    # Add format selection and a single download button below the seqPlot
+                    div(style = "margin-top: 15px;",
+                        shiny.semantic::multiple_radio(
+                          input_id = "downloadFormat",
+                          label = "Select format:",
+                          choices = c(".fasta" = "fasta", ".pdf" = "pdf"),
+                          selected = "fasta",
+                          inline = TRUE
+                        ),
+                        downloadButton("downloadAlignment", "Download Alignment", class = "ui button")
+                    ),
                     class = "secondary",
                     style = "padding: 20px; border: 1px solid #ddd; background-color: white"
                   )
@@ -691,7 +742,7 @@ server <- function(input, output, session) {
     paste(
       "<div style='border: 1px solid #ccc; padding: 10px;'>",
       "Amino acid <b>", aligned_data()$aligned_amino, "</b> at reference position <b>",
-      aligned_data()$original_position, "</b> is aligned at position <b>",
+      aligned_data()$original_position, "</b> is globally aligned at position <b>",
       aligned_data()$aligned_position, "</b> and is highlighted.",
       "</div>"
     )
