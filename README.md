@@ -2,6 +2,9 @@
 
 RNaseViz is a web-based application built with R Shiny, providing an interactive platform for visualizing RNase sequences, their conservation across different species, and the mutations associated with Mendelian diseases.
 https://norreanea.shinyapps.io/RNaseViz/
+
+This tool was developed as part of the article [Ribonucleases in Mendelian disease: Characterization and insight from model organisms](https://www.sciencedirect.com/science/article/pii/S2352304225001023)
+
 ## Features
 
 - Selection of RNase enzymes from a curated list of disease-relevant ribonucleases.
@@ -24,7 +27,7 @@ To use the RNaseViz application:
 6. **Explore Curated Features**: Use the curated variant table in Overview to navigate to marked disease-associated residues or regions.
 7. **View Domain Organization**: For RNases with available domain figures, inspect the domain organization panel and its explanatory legend in the Alignment tab.
 8. **Download Alignment Files**: Download the whole alignment as either a FASTA file or an annotated PDF figure with marked pathogenic variants for offline use.
-![Figure2](https://github.com/user-attachments/assets/c43109ba-74c9-4e5b-98e7-6e06c615b9f2)
+
 
 ## Contact
 
