@@ -1,0 +1,13 @@
+name: RNaseViz
+title: RNaseViz
+username: norreanea
+account: norreanea
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11810573
+bundleId: 11956796
+url: https://norreanea.shinyapps.io/RNaseViz/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .codex_pathcheck.R|.codex_scalecheck.R
