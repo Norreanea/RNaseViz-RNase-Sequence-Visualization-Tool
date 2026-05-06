@@ -4,23 +4,26 @@ RNaseViz is a web-based application built with R Shiny, providing an interactive
 https://norreanea.shinyapps.io/RNaseViz/
 ## Features
 
-- Selection of RNase enzymes from a predefined list.
-- Visualization of sequence conservation using multiple sequence alignments.
-- Interactive phylogenetic trees illustrating evolutionary relationships.
-- Highlighting specific mutations and their positions within the sequences.
-- Support for various RNase enzymes with associated Mendelian disease mutations.
+- Selection of RNase enzymes from a curated list of disease-relevant ribonucleases.
+- Visualization of sequence conservation across orthologs using multiple sequence alignments.
+- Overview cards summarizing the selected RNase, curated variants, available orthologs, scientific context, and organism abbreviations.
+- Display of ortholog trees and domain organization figures for supported RNases.
+- Residue-level inspection by clicking the alignment or entering a reference-sequence position manually.
+- Download of whole alignments as FASTA files or annotated PDF figures with marked pathogenic variants.
+- Support for multiple RNase enzymes associated with Mendelian disease.
 
 ## Usage
 
 To use the RNaseViz application:
 
-1. **Visualize**: From the dropdown menu labeled "Choose RNase:", select the RNase enzyme you wish to analyze and click the 'Visualize' button.
-2. **Highlight Mutation**: Use the "Select organism:" dropdown to choose the organism of interest, enter a position number in the reference sequence, and click 'Highlight position' to view specific mutations.
-3. **RNase info**: Provides in-depth information about the selected RNase enzyme, including the potential molecular consequences of its mutations.
-4. **Residue Highlighting**: Highlights the specified residue within the sequence alignment, along with the two adjacent residues on either side, to emphasize key positions.
-5. **Explore Tree**: The displayed tree structure allows you to explore how different RNase sequences relate to different species.
-6. **Inspect Residues**: Select and highlight any residue within the sequence alignment for detailed examination and analysis.
-7. **Download Global Alignment**: Download sequence alignments in FASTA or PDF formats for offline analysis.
+1. **Select RNase**: Choose an RNase from the "RNase family member" dropdown. The app updates automatically to the selected enzyme.
+2. **Review Overview**: In the Overview tab, inspect the scientific context, curated variants / marked positions, ortholog tree, and organism abbreviations.
+3. **Choose Reference Organism**: Use the "Reference organism" dropdown to set the sequence used for residue mapping and manual position queries.
+4. **Inspect Residues**: In the Alignment tab, click on the global alignment or residue-window plot to inspect a selected aligned position and its conservation across orthologs.
+5. **Highlight a Reference Position**: Enter a residue number or mutation-like query in the reference-position field and click "Highlight / inspect residue" to jump to that site.
+6. **Explore Curated Features**: Use the curated variant table in Overview to navigate to marked disease-associated residues or regions.
+7. **View Domain Organization**: For RNases with available domain figures, inspect the domain organization panel and its explanatory legend in the Alignment tab.
+8. **Download Alignment Files**: Download the whole alignment as either a FASTA file or an annotated PDF figure with marked pathogenic variants for offline use.
 ![Figure2](https://github.com/user-attachments/assets/c43109ba-74c9-4e5b-98e7-6e06c615b9f2)
 
 ## Contact
