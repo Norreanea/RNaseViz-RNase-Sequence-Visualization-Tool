@@ -40,7 +40,7 @@ To use the RNaseViz application:
     
 <img width="851" height="912" alt="image" src="https://github.com/user-attachments/assets/4561ded4-693b-473c-b5fb-81bc283b94ad" />
 
-Bellow is the example of DICER1 alignment report from RNaseViz. The human sequence is aligned with orthologs from other species, and disease-associated mutations are marked directly on the alignment. The colors correspond to different diseases, and each mutation label is linked to corresponding ClinVar page.
+Below is the example of DICER1 alignment report from RNaseViz. The human sequence is aligned with orthologs from other species, and disease-associated mutations are marked directly on the alignment. The colors correspond to different diseases, and each mutation label is linked to corresponding ClinVar page.
 
 <img width="1020" height="719" alt="image" src="https://github.com/user-attachments/assets/aa217ebc-a73b-4304-9061-70dd46a4843f" />
 
