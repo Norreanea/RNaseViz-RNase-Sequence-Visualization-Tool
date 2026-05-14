@@ -30,24 +30,19 @@ To use the RNaseViz application:
 9. **Ortholog phylogenetic tree**: Shows evolutionary relationships among orthologs of the selected RNase across species.
 10. **Organism abbreviations**
 11. **Curated variant table**: Interactive table listing pathogenic or otherwise marked residues/regions, searchable and filterable by organism and aligned position.
+
+<img width="927" height="710" alt="image" src="https://github.com/user-attachments/assets/d7e7c39a-1806-4356-b8ac-b61c576104b0" />
+
 12. **Residue inspection summary**: Displays the currently selected residue, its aligned coordinate, conservation level, and nearby curated features.
 13. **Domain organization panel**: Shows protein architecture across species, with domains and marked disease-associated residues positioned along the sequence.
 14. **Domain figure legend**: Explains how to read the domain map, including aligned positions, exon deletions, domain colors, and mutation markers.
 15. **Multiple sequence alignment viewer**: Comparative visualization showing residue conservation, mismatches, gaps, and the positions of curated variants across orthologs.
+    
+<img width="798" height="737" alt="image" src="https://github.com/user-attachments/assets/c3a3b314-0709-4754-836a-a4c2624398f2" />
 
-<img width="2031" height="396" alt="image" src="https://github.com/user-attachments/assets/25b44dc2-96db-4371-a619-30f193c64a0f" />
-
-
-<img width="2078" height="981" alt="image" src="https://github.com/user-attachments/assets/6dc96260-bc3d-483a-836f-62d8a9e7f9a1" />
-
-
+<img width="1128" height="464" alt="image" src="https://github.com/user-attachments/assets/8000a8b0-618b-4e95-a7fe-2dddc2a6296b" />
 
 ## Contact
 
 For questions or support, please open an issue on this [GitHub repository](https://github.com/Norreanea/RNaseViz-RNase-Sequence-Visualization-Tool/issues).
 
-<img width="927" height="710" alt="image" src="https://github.com/user-attachments/assets/d7e7c39a-1806-4356-b8ac-b61c576104b0" />
-
-<img width="798" height="737" alt="image" src="https://github.com/user-attachments/assets/c3a3b314-0709-4754-836a-a4c2624398f2" />
-
-<img width="1128" height="464" alt="image" src="https://github.com/user-attachments/assets/8000a8b0-618b-4e95-a7fe-2dddc2a6296b" />
