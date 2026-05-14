@@ -38,9 +38,11 @@ To use the RNaseViz application:
 14. **Domain figure legend**: Explains how to read the domain map, including aligned positions, exon deletions, domain colors, and mutation markers.
 15. **Multiple sequence alignment viewer**: Comparative visualization showing residue conservation, mismatches, gaps, and the positions of curated variants across orthologs.
     
-<img width="798" height="737" alt="image" src="https://github.com/user-attachments/assets/c3a3b314-0709-4754-836a-a4c2624398f2" />
+<img width="851" height="912" alt="image" src="https://github.com/user-attachments/assets/4561ded4-693b-473c-b5fb-81bc283b94ad" />
 
-<img width="1128" height="464" alt="image" src="https://github.com/user-attachments/assets/8000a8b0-618b-4e95-a7fe-2dddc2a6296b" />
+Bellow is the example of DICER1 alignment report from RNaseViz. The human sequence is aligned with orthologs from other species, and disease-associated mutations are marked directly on the alignment. The colors correspond to different diseases, and each mutation label is linked to corresponding ClinVar page.
+
+<img width="1020" height="719" alt="image" src="https://github.com/user-attachments/assets/aa217ebc-a73b-4304-9061-70dd46a4843f" />
 
 ## Contact
 
